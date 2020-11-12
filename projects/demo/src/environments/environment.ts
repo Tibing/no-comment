@@ -3,7 +3,16 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  firebaseConfig: {
+    apiKey: 'AIzaSyDdCdiklvkNjwv523A__h8wW4ymgKc8xs8',
+    authDomain: 'commentario.firebaseapp.com',
+    databaseURL: 'https://commentario.firebaseio.com',
+    projectId: 'commentario',
+    storageBucket: 'commentario.appspot.com',
+    messagingSenderId: '360872986403',
+    appId: '1:360872986403:web:dfcaa75488daea37b02e96',
+  },
 };
 
 /*
