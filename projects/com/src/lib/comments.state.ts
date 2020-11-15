@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { v4 as uuid } from 'uuid';
 
-import { Comment, Comments, ViewComment, ViewComments } from './model';
+import { Comment, Comments, ViewComments } from './model';
 
 @Injectable({ providedIn: 'root' })
 export class CommentsState extends BehaviorSubject<Comments> {
@@ -18,7 +18,7 @@ export class CommentsState extends BehaviorSubject<Comments> {
       this.getValue()
         .map((comment: Comment) => {
           if (comment.id === commentId) {
-            return { ...comment, votes: comment.votes + 1};
+            return { ...comment, votes: comment.votes + 1 };
           }
 
           return comment;
@@ -31,7 +31,7 @@ export class CommentsState extends BehaviorSubject<Comments> {
       this.getValue()
         .map((comment: Comment) => {
           if (comment.id === commentId) {
-            return { ...comment, votes: comment.votes - 1};
+            return { ...comment, votes: comment.votes - 1 };
           }
 
           return comment;
@@ -50,29 +50,30 @@ export class CommentsState extends BehaviorSubject<Comments> {
           userName: 'Nikita Poltoratsky',
           votes: 0,
           content,
-          head: '',
-        }
-      ]
+          head: 'https://en.gravatar.com/userimage/151538585/142b66ddcb21c792305183e4bf715a8a.jpg?size=200',
+        },
+      ],
     );
   }
 
-  private createViewModel(comments: Comments): ViewComments {
+  byId(commentId: string): Observable<Comment> {
+    return this.asObservable()
+      .pipe(
+        map((comments: Comments) => {
+          return comments.find((comment: Comment) => comment.id === commentId)!;
+        }),
+      );
+  }
+
+  private createViewModel(comments: Comments, parentId?: string): ViewComments {
     const viewComments: ViewComments = [];
+    const currentLevelComments: Comments = comments
+      .filter((comment: Comment) => comment.parentCommentId === parentId)
+      .sort((a: Comment, b: Comment) => a.createdAt.getTime() - b.createdAt.getTime());
 
-    for (const comment of comments) {
-      if (!comment.parentCommentId) {
-        viewComments.push({ ...comment, children: [] });
-      } else {
-        const parent: Comment = comments.find((c: Comment) => c.id === comment.parentCommentId)!;
-        const alreadyAddedParent: ViewComment | undefined = viewComments.find((viewComment: ViewComment) => viewComment.id === parent.id);
-
-
-        if (alreadyAddedParent) {
-          alreadyAddedParent.children.push({ ...comment, children: [] });
-        } else {
-          viewComments.push({ ...parent, children: [{ ...comment, children: [] }] });
-        }
-      }
+    for (const comment of currentLevelComments) {
+      const children: ViewComments = this.createViewModel(comments, comment.id);
+      viewComments.push({ ...comment, children });
     }
 
     return viewComments;

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
-import { ViewComments } from '../model';
+import { ViewComments, Comment } from '../model';
 
 const possibleColors: string[] = [
   '#7C4DFF',
@@ -26,6 +26,10 @@ export class CommentsComponent {
   @Input() comments: ViewComments | null = [];
 
   get color(): string {
-    return possibleColors[Math.floor(Math.random() * possibleColors.length)];
+    return '#7C4DFF';
+  }
+
+  commentsTrackBy(index: number, comment: Comment): string {
+    return comment.id;
   }
 }

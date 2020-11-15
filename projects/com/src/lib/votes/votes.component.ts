@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
-import { ViewComment } from '../model';
+import { Comment } from '../model';
 import { CommentsState } from '../comments.state';
 
 @Component({
@@ -11,16 +11,16 @@ import { CommentsState } from '../comments.state';
 })
 export class VotesComponent {
 
-  @Input() comment!: ViewComment;
+  @Input() comment!: Comment;
 
-  constructor(private commentesState: CommentsState) {
+  constructor(private commentsState: CommentsState) {
   }
 
   upvote(): void {
-    this.commentesState.upvote(this.comment.id);
+    this.commentsState.upvote(this.comment.id);
   }
 
   downvote(): void {
-    this.commentesState.downvote(this.comment.id);
+    this.commentsState.downvote(this.comment.id);
   }
 }

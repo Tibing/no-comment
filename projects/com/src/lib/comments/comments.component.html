@@ -1,8 +1,8 @@
 <div class="container" [style.borderColor]="color">
 
   <lib-comment
-    [comment]="comment"
-    *ngFor="let comment of comments"
+    [viewComment]="comment"
+    *ngFor="let comment of comments; trackBy: commentsTrackBy"
   ></lib-comment>
 
 </div>

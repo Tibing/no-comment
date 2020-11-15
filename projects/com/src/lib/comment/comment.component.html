@@ -1,47 +1,50 @@
-<div class="container">
+<ng-container *ngIf="comment$ | async as comment">
 
-  <div class="header">
+  <div class="container">
 
-    <div class="left">
+    <div class="header">
 
-      <img class="head" [src]="comment.head">
+      <div class="left">
 
-      <div>
-        <p class="user-name">{{ comment.userName }}</p>
-        <p class="created-at">{{ comment.createdAt | date }}</p>
+        <img class="head" [src]="comment.head">
+
+        <div>
+          <p class="user-name">{{ comment.userName }}</p>
+          <p class="created-at">{{ comment.createdAt | date }}</p>
+        </div>
+
+      </div>
+
+      <div class="right">
+        <lib-votes [comment]="comment"></lib-votes>
       </div>
 
     </div>
 
-    <div class="right">
-      <lib-votes [comment]="comment"></lib-votes>
+    <div class="body">
+
+      <p>
+        {{ comment.content }}
+      </p>
+
     </div>
 
+    <div class="footer">
+
+      <button class="reply" *ngIf="!showReply" (click)="showReply = true">
+        <i>Reply</i>
+      </button>
+
+      <button class="submit" *ngIf="showReply" (click)="showReply = false; submit()">
+        <i>submit</i>
+      </button>
+    </div>
+
+    <textarea autofocus *ngIf="showReply" (change)="setContent($event.target.value)"></textarea>
+
   </div>
 
-  <div class="body">
-
-    <p>
-      {{ comment.content }}
-    </p>
-
-  </div>
-
-  <div class="footer">
-
-    <button class="reply" *ngIf="!showReply" (click)="showReply = true">
-      <i>Reply</i>
-    </button>
-
-    <button class="submit" *ngIf="showReply" (click)="showReply = false; submit()">
-      <i>submit</i>
-    </button>
-  </div>
-
-  <textarea autofocus *ngIf="showReply" (change)="setContent($event.target.value)"></textarea>
-
-</div>
-
-<lib-comments
-  [comments]="comment.children"
-></lib-comments>
+  <lib-comments
+    [comments]="(viewComment$ | async).children"
+  ></lib-comments>
+</ng-container>

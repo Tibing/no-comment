@@ -12,11 +12,6 @@ export type Comments = Comment[];
 
 export interface ViewComment {
   id: string;
-  userName: string;
-  head: string;
-  createdAt: Date;
-  content: string;
-  votes: number;
   children: ViewComment[];
 }
 
