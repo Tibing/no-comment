@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { filter, shareReplay, switchMap } from 'rxjs/operators';
+import { ChangeDetectionStrategy, Component, ElementRef, Input } from '@angular/core';
+import { BehaviorSubject, from, Observable, of, timer } from 'rxjs';
+import { concatMap, delay, filter, mapTo, shareReplay, startWith, switchMap, take, tap } from 'rxjs/operators';
 
 import { Comment, ViewComment } from '../model';
 import { CommentsState } from '../comments.state';
+import { ScrollerService } from '../scroller.service';
 
 @Component({
   selector: 'lib-comment',
@@ -17,8 +18,8 @@ export class CommentComponent {
     this.viewComment$.next(viewComment);
   }
 
-  showReply = false;
   viewComment$: BehaviorSubject<ViewComment> = new BehaviorSubject<ViewComment>(null!);
+
   comment$: Observable<Comment> = this.viewComment$
     .pipe(
       filter<ViewComment>(Boolean),
@@ -26,16 +27,38 @@ export class CommentComponent {
       shareReplay(),
     );
 
-  private content = '';
+  flash$: Observable<boolean> = this.comment$
+    .pipe(
+      take(1),
+      switchMap((comment: Comment) => this.scrollerService.waitScrollRequest(comment.id)),
+      tap(() => {
+        console.log({ height: this.elementRef.nativeElement.scrollHeight });
+        const position: number = this.findPos(this.elementRef.nativeElement);
+        window.scroll(0, position);
+      }),
+      switchMap(() => from([true, false])),
+      concatMap(x => of(x).pipe(delay(100)))
+    );
 
-  constructor(private commentsState: CommentsState) {
+  constructor(private commentsState: CommentsState,
+              private elementRef: ElementRef,
+              private scrollerService: ScrollerService) {
   }
 
-  submit(): void {
-    this.commentsState.comment(this.viewComment$.value.id, this.content);
-  }
+  private findPos(el: HTMLElement): number {
+    let curtop = 0;
+    let e: HTMLElement | null = el;
 
-  setContent(content: string): void {
-    this.content = content;
+    if (e.offsetParent) {
+      do {
+        curtop += e.offsetTop;
+        e = e.offsetParent as never;
+      } while (e);
+
+      return curtop;
+    }
+
+    return 0;
   }
 }
+

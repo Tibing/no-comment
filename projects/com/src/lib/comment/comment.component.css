@@ -4,8 +4,18 @@
 }
 
 .container {
-  margin-bottom: 1rem;
-  padding-bottom: 1rem;
+  background: transparent;
+  padding: 1rem;
+  margin-left: -1rem;
+  border-radius: 4px;
+}
+
+.container:not(.flash) {
+  transition: background 5s;
+}
+
+.flash {
+  background: rgba(156, 39, 176, 0.5);
 }
 
 .header {
@@ -43,31 +53,10 @@
 
 p {
   margin: 0;
+  word-break: break-word;
 }
 
 p:not(:last-child) {
   margin-bottom: 0.25rem;
 }
 
-.footer {
-  display: flex;
-  justify-content: flex-end;
-  padding: 1rem;
-}
-
-.reply, .submit {
-  font-family: 'Roboto Mono', monospace;
-  background: none;
-  border: none;
-  outline: none;
-  cursor: pointer;
-}
-
-textarea {
-  width: 100%;
-  height: 200px;
-  border: none;
-  outline: none;
-  font-size: 1rem;
-  font-family: 'Roboto Mono', monospace;
-}

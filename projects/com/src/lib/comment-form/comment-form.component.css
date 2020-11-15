@@ -1,0 +1,43 @@
+:host {
+  display: flex;
+  padding: 1rem 0;
+  flex-direction: column;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+}
+
+button {
+  font-family: 'Roboto Mono', monospace;
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  margin-top: 0;
+  transition: margin-top 0.3s;
+}
+
+textarea {
+  width: calc(100% - 2rem - 4px);
+  height: 0;
+  outline: none;
+  border: none;
+  font-size: 1rem;
+  font-family: 'Roboto Mono', monospace;
+  transition: height 0.3s;
+  resize: none;
+  padding: 0;
+}
+
+textarea.visible {
+  height: 200px;
+  border: 2px solid #9C27B0;
+  border-radius: 4px;
+  padding: 1rem;
+}
+
+textarea.visible + .buttons {
+  margin-top: 1rem;
+}

@@ -1,6 +1,6 @@
 <ng-container *ngIf="comment$ | async as comment">
 
-  <div class="container">
+  <div class="container" [class.flash]="flash$ | async">
 
     <div class="header">
 
@@ -28,20 +28,7 @@
       </p>
 
     </div>
-
-    <div class="footer">
-
-      <button class="reply" *ngIf="!showReply" (click)="showReply = true">
-        <i>Reply</i>
-      </button>
-
-      <button class="submit" *ngIf="showReply" (click)="showReply = false; submit()">
-        <i>submit</i>
-      </button>
-    </div>
-
-    <textarea autofocus *ngIf="showReply" (change)="setContent($event.target.value)"></textarea>
-
+    <lib-comment-form [viewComment]="viewComment$ | async"></lib-comment-form>
   </div>
 
   <lib-comments

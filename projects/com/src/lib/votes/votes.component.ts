@@ -17,10 +17,10 @@ export class VotesComponent {
   }
 
   upvote(): void {
-    this.commentsState.upvote(this.comment.id);
+    this.commentsState.setVotes(this.comment.id, this.comment.votes + 1);
   }
 
   downvote(): void {
-    this.commentsState.downvote(this.comment.id);
+    this.commentsState.setVotes(this.comment.id, this.comment.votes - 1);
   }
 }

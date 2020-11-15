@@ -1,0 +1,28 @@
+<form [formGroup]="formGroup" (ngSubmit)="submit(formGroup.value)">
+  <textarea #textarea [class.visible]="showTextarea$ | async" formControlName="content"></textarea>
+
+  <div class="buttons">
+    <button
+      class="reply"
+      type="button"
+      *ngIf="showReply$ | async"
+      (click)="showTextarea()">
+      <i>Reply</i>
+    </button>
+
+    <button
+      class="cancel"
+      type="button"
+      *ngIf="showCancel$ | async"
+      (click)="showTextarea$.next(false)">
+      <i>Cancel</i>
+    </button>
+
+    <button
+      class="submit"
+      type="submit"
+      *ngIf="showSubmit$ | async">
+      <i>Submit</i>
+    </button>
+  </div>
+</form>
