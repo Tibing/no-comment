@@ -1,31 +1,29 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 import { CommentsState } from './comments.state';
 import { ViewComments } from './model';
-import { map, shareReplay } from 'rxjs/operators';
 import { ScrollerService } from './scroller.service';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'lib-com',
   template: `
-    <lib-comments
-      *ngIf="commentsExist$ | async"
-      [comments]="comments$ | async"
-    ></lib-comments>
+    <lib-comment-form></lib-comment-form>
 
-    <lib-comment-form *ngIf="!(commentsExist$ | async)"></lib-comment-form>
+    <lib-comments [comments]="comments$ | async"></lib-comments>
+
+    <span *ngIf="loading$ | async">Loading...</span>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [CommentsState, ScrollerService],
 })
 export class ComComponent {
 
-  comments$: Observable<ViewComments> = this.commentsState.comments$;
-  commentsExist$: Observable<boolean> = this.comments$
+  loading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  comments$: Observable<ViewComments> = this.commentsState.comments$
     .pipe(
-      map((comments: ViewComments) => !!comments?.length),
-      shareReplay()
+      tap(() => this.loading$.next(false)),
     );
 
   constructor(private commentsState: CommentsState) {
