@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { v4 as uuid } from 'uuid';
 
 import { CommentsState } from './comments.state';
-import { ViewComments } from './model';
+import { Comments, ViewComments } from './model';
 
 @Component({
   selector: 'lib-com',
@@ -22,6 +22,65 @@ export class ComComponent {
     const id3: string = uuid();
     const id4: string = uuid();
     const id5: string = uuid();
+
+    const linear: Comments = [
+      {
+        userName: 'Nikita Poltoratsky',
+        createdAt: new Date(),
+        content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
+        votes: 1,
+        head: 'https://en.gravatar.com/userimage/151538585/142b66ddcb21c792305183e4bf715a8a.jpg?size=200',
+        id: uuid(),
+      },
+      {
+        userName: 'Nikita Poltoratsky',
+        createdAt: new Date(),
+        content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
+        votes: 1,
+        head: 'https://en.gravatar.com/userimage/151538585/142b66ddcb21c792305183e4bf715a8a.jpg?size=200',
+        id: uuid(),
+      },
+      {
+        userName: 'Nikita Poltoratsky',
+        createdAt: new Date(),
+        content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
+        votes: 1,
+        head: 'https://en.gravatar.com/userimage/151538585/142b66ddcb21c792305183e4bf715a8a.jpg?size=200',
+        id: uuid(),
+      },
+      {
+        userName: 'Nikita Poltoratsky',
+        createdAt: new Date(),
+        content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
+        votes: 1,
+        head: 'https://en.gravatar.com/userimage/151538585/142b66ddcb21c792305183e4bf715a8a.jpg?size=200',
+        id: uuid(),
+      },
+      {
+        userName: 'Nikita Poltoratsky',
+        createdAt: new Date(),
+        content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
+        votes: 1,
+        head: 'https://en.gravatar.com/userimage/151538585/142b66ddcb21c792305183e4bf715a8a.jpg?size=200',
+        id: uuid(),
+      },
+      {
+        userName: 'Nikita Poltoratsky',
+        createdAt: new Date(),
+        content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
+        votes: 1,
+        head: 'https://en.gravatar.com/userimage/151538585/142b66ddcb21c792305183e4bf715a8a.jpg?size=200',
+        id: uuid(),
+      },
+      {
+        userName: 'Nikita Poltoratsky',
+        createdAt: new Date(),
+        content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
+        votes: 1,
+        head: 'https://en.gravatar.com/userimage/151538585/142b66ddcb21c792305183e4bf715a8a.jpg?size=200',
+        id: uuid(),
+      },
+    ];
 
     commentsState.next([
       {
@@ -67,6 +126,7 @@ export class ComComponent {
         id: id5,
         parentCommentId: id4,
       },
+      ...linear,
     ]);
   }
 }

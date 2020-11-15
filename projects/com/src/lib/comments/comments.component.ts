@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
-import { ViewComments, Comment } from '../model';
+import { Comment, ViewComments } from '../model';
+import { commentsEnter } from './comments-enter.animation';
 
 const possibleColors: string[] = [
   '#7C4DFF',
@@ -19,6 +20,7 @@ const possibleColors: string[] = [
   selector: 'lib-comments',
   templateUrl: './comments.component.html',
   styleUrls: ['./comments.component.css'],
+  animations: [commentsEnter],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CommentsComponent {

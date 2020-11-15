@@ -1,4 +1,7 @@
-<div class="container" [style.borderColor]="color">
+<div
+  class="container"
+  [@stagger]="comments?.length"
+  [style.borderColor]="color">
 
   <lib-comment
     [viewComment]="comment"
