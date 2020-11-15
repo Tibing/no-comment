@@ -61,3 +61,15 @@ p:not(:last-child) {
   margin-bottom: 0.25rem;
 }
 
+.remove {
+  background: none;
+  border: none;
+  margin-right: 1rem;
+  outline: none;
+}
+
+.remove > img {
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
+}

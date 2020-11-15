@@ -83,7 +83,20 @@ export class CommentsState extends AngularFirestore {
               content,
               head: user.photoURL ?? 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48ZGVmcy8+PHBhdGggZD0iTTUxMiAyNTZhMjU2IDI1NiAwIDEwLTUxMyAxIDI1NiAyNTYgMCAwMDUxMy0xem0tNDk1IDBhMjM5IDIzOSAwIDExMzY3IDIwMnYtNDhjMC00Ni0yNC04OC02NC0xMTEtMi0yLTYtMS05IDAtMzMgMjItNzcgMjItMTEwIDAtMy0xLTctMi05IDAtNDAgMjMtNjQgNjUtNjQgMTExdjQ4QTIzOSAyMzkgMCAwMTE3IDI1NnptMTI4IDIxMnYtNThjMC0zOCAxOS03MyA1MS05NCAzNiAyMiA4NCAyMiAxMjAgMCAzMiAyMSA1MSA1NiA1MSA5NHY1OGEyMzcgMjM3IDAgMDEtMjIyIDB6Ii8+PHBhdGggZD0iTTI1NiAyODJhODUgODUgMCAxMDAtMTcxIDg1IDg1IDAgMDAwIDE3MXptMC0xNTRhNjggNjggMCAxMTAgMTM3IDY4IDY4IDAgMDEwLTEzN3oiLz48L3N2Zz4NCg==',
               location: this.select(),
+              userId: user.uid,
             });
+        }),
+      )
+      .subscribe();
+  }
+
+  removeComment(commentId: string): void {
+    this.values$
+      .pipe(
+        take(1),
+        tap((comments: Comments) => {
+          this.col.doc(commentId).delete();
+          this.removeTree(comments, commentId);
         }),
       )
       .subscribe();
@@ -108,6 +121,17 @@ export class CommentsState extends AngularFirestore {
       const children: ViewComments = this.createViewModel(comments, comment.id);
       const justAdded: boolean = !this.commentsCache.has(comment.id) && this.initialLoadDone;
       viewComments.push({ id: comment.id, children, justAdded });
+    }
+
+    return viewComments;
+  }
+
+  private removeTree(comments: Comments, parentId: string = ''): ViewComments {
+    const viewComments: ViewComments = [];
+    const currentLevelComments: Comments = comments.filter((comment: Comment) => comment.parentCommentId === parentId);
+
+    for (const comment of currentLevelComments) {
+      this.col.doc(comment.id).delete();
     }
 
     return viewComments;

@@ -1,10 +1,13 @@
 import { ChangeDetectionStrategy, Component, ElementRef, Input } from '@angular/core';
-import { BehaviorSubject, from, Observable, of } from 'rxjs';
-import { concatMap, delay, filter, shareReplay, switchMap, tap } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, from, Observable, of } from 'rxjs';
+import { concatMap, delay, filter, map, shareReplay, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { Comment, ViewComment } from '../model';
 import { CommentsState } from '../comments.state';
+import { AngularFireAuth } from '@angular/fire/auth';
+import firebase from 'firebase';
+import User = firebase.User;
 
 @Component({
   selector: 'lib-comment',
@@ -38,9 +41,24 @@ export class CommentComponent {
     concatMap(x => of(x).pipe(delay(100)))
   );
 
+  canDelete$: Observable<boolean> = combineLatest([
+    this.comment$,
+    this.fauth.user,
+  ])
+    .pipe(
+      map(([comment, user]: [Comment | null, User | null]) => {
+        return comment?.userId === user?.uid;
+      })
+    );
+
   constructor(private commentsState: CommentsState,
               private elementRef: ElementRef,
+              private fauth: AngularFireAuth,
               public sanitizer: DomSanitizer) {
+  }
+
+  delete(): void {
+    this.commentsState.removeComment(this.viewComment$.value.id);
   }
 
   private findPos(el: HTMLElement): number {

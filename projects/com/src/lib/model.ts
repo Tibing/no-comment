@@ -6,6 +6,7 @@ export interface Comment {
   content: string;
   votes: number;
   location: string;
+  userId: string;
   parentCommentId?: string;
 }
 
