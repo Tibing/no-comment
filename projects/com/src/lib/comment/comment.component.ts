@@ -4,7 +4,6 @@ import { concatMap, delay, filter, shareReplay, switchMap, take, tap } from 'rxj
 
 import { Comment, ViewComment } from '../model';
 import { CommentsState } from '../comments.state';
-import { ScrollerService } from '../scroller.service';
 
 @Component({
   selector: 'lib-comment',
@@ -28,22 +27,18 @@ export class CommentComponent {
       shareReplay(),
     );
 
-  flash$: Observable<boolean> = this.comment$
-    .pipe(
-      take(1),
-      switchMap((comment: Comment) => this.scrollerService.waitScrollRequest(comment.id)),
-      tap(() => {
-        console.log({ height: this.elementRef.nativeElement.scrollHeight });
-        const position: number = this.findPos(this.elementRef.nativeElement);
-        window.scroll(0, position);
-      }),
-      switchMap(() => from([true, false])),
-      concatMap(x => of(x).pipe(delay(100)))
-    );
+  flash$: Observable<boolean> = this.viewComment$.pipe(
+    filter((viewComment: ViewComment) => viewComment.justAdded),
+    tap(() => {
+      const position: number = this.findPos(this.elementRef.nativeElement);
+      window.scroll(0, position);
+    }),
+    switchMap(() => from([true, false])),
+    concatMap(x => of(x).pipe(delay(100)))
+  );
 
   constructor(private commentsState: CommentsState,
-              private elementRef: ElementRef,
-              private scrollerService: ScrollerService) {
+              private elementRef: ElementRef) {
   }
 
   private findPos(el: HTMLElement): number {

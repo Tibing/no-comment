@@ -14,6 +14,7 @@ export type Comments = Comment[];
 export interface ViewComment {
   id: string;
   children: ViewComment[];
+  justAdded: boolean;
 }
 
 export type ViewComments = ViewComment[];

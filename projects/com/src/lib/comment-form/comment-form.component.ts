@@ -1,11 +1,10 @@
 import { Component, ElementRef, Input, OnDestroy, ViewChild } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
-import { map, startWith, takeUntil, tap } from 'rxjs/operators';
+import { map, startWith } from 'rxjs/operators';
 import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
 
 import { CommentsState } from '../comments.state';
 import { ViewComment } from '../model';
-import { ScrollerService } from '../scroller.service';
 
 @Component({
   selector: 'lib-comment-form',
@@ -46,8 +45,7 @@ export class CommentFormComponent implements OnDestroy {
 
   private destroy$: Subject<void> = new Subject<void>();
 
-  constructor(private commentsState: CommentsState,
-              private scrollerService: ScrollerService) {
+  constructor(private commentsState: CommentsState) {
   }
 
   ngOnDestroy(): void {
@@ -61,15 +59,8 @@ export class CommentFormComponent implements OnDestroy {
 
   submit(formData: { content: string }): void {
     this.showTextarea$.next(false);
-    this.commentsState.addComment(formData.content, this.viewComment$.value?.id)
-      .pipe(
-        tap((commentId: string) => {
-          this.content.patchValue('');
-          this.scrollerService.scrollTo(commentId);
-        }),
-        takeUntil(this.destroy$),
-      )
-      .subscribe();
+    this.commentsState.addComment(formData.content, this.viewComment$.value?.id);
+    this.content.patchValue('');
   }
 
   get content$(): Observable<string> {

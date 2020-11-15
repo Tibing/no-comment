@@ -1,10 +1,9 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 import { CommentsState } from './comments.state';
 import { ViewComments } from './model';
-import { ScrollerService } from './scroller.service';
-import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'lib-com',
@@ -16,7 +15,7 @@ import { tap } from 'rxjs/operators';
     <span *ngIf="loading$ | async">Loading...</span>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [CommentsState, ScrollerService],
+  providers: [CommentsState],
 })
 export class ComComponent {
 

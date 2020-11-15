@@ -1,2 +1,2 @@
-export * from './lib/com.component';
-export * from './lib/com.module';
+export { ComModule } from './lib/com.module';
+export { ComComponent } from './lib/com.component';

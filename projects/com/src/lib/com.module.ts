@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { ComComponent } from './com.component';
@@ -17,7 +16,6 @@ import { defaultIdSelectorProvider } from './location-selector';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    BrowserAnimationsModule,
     AngularFirestoreModule,
   ],
   exports: [ComComponent],
