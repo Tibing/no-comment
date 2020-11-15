@@ -5,6 +5,7 @@ export interface Comment {
   createdAt: Date;
   content: string;
   votes: number;
+  location: string;
   parentCommentId?: string;
 }
 

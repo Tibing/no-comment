@@ -9,6 +9,7 @@ import { CommentComponent } from './comment/comment.component';
 import { CommentsComponent } from './comments/comments.component';
 import { VotesComponent } from './votes/votes.component';
 import { CommentFormComponent } from './comment-form/comment-form.component';
+import { defaultIdSelectorProvider } from './location-selector';
 
 
 @NgModule({
@@ -20,6 +21,7 @@ import { CommentFormComponent } from './comment-form/comment-form.component';
     AngularFirestoreModule,
   ],
   exports: [ComComponent],
+  providers: [defaultIdSelectorProvider],
 })
 export class ComModule {
 }
