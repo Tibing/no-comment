@@ -1,9 +1,11 @@
 <div
   class="container"
   [@stagger]="comments?.length"
+  [class.first-level]="!level"
   [style.borderColor]="color">
 
   <lib-comment
+    [level]="level"
     [viewComment]="comment"
     *ngFor="let comment of comments; trackBy: commentsTrackBy"
   ></lib-comment>

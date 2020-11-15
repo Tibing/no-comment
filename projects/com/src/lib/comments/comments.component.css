@@ -4,3 +4,8 @@
   border-left: 2px solid;
   margin-bottom: 1rem;
 }
+
+.first-level {
+  padding-left: 0;
+  border-left: none;
+}

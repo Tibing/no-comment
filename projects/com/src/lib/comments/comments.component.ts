@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, InjectionToken, Input } from '@angular/core';
 
 import { Comment, ViewComments } from '../model';
 import { commentsEnter } from './comments-enter.animation';
@@ -26,6 +26,7 @@ const possibleColors: string[] = [
 export class CommentsComponent {
 
   @Input() comments: ViewComments | null = [];
+  @Input() level = 0;
 
   get color(): string {
     return '#7C4DFF';

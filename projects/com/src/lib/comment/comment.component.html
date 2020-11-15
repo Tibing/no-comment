@@ -32,6 +32,7 @@
   </div>
 
   <lib-comments
+    [level]="level + 1"
     [comments]="(viewComment$ | async).children"
   ></lib-comments>
 </ng-container>
