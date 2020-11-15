@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { ReactiveFormsModule } from '@angular/forms';
+import { AngularFireAuthModule } from '@angular/fire/auth';
 
 import { ComComponent } from './com.component';
 import { CommentComponent } from './comment/comment.component';
@@ -17,6 +18,7 @@ import { defaultIdSelectorProvider } from './location-selector';
     CommonModule,
     ReactiveFormsModule,
     AngularFirestoreModule,
+    AngularFireAuthModule,
   ],
   exports: [ComComponent],
   providers: [defaultIdSelectorProvider],

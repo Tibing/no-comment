@@ -6,7 +6,7 @@
 
       <div class="left">
 
-        <img class="head" [src]="comment.head">
+        <img class="head" [src]="sanitizer.bypassSecurityTrustUrl(comment.head)">
 
         <div>
           <p class="user-name">{{ comment.userName }}</p>

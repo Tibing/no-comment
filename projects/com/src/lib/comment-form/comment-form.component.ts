@@ -2,6 +2,10 @@ import { Component, ElementRef, Input, OnDestroy, ViewChild } from '@angular/cor
 import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
+import firebase from 'firebase';
+import auth = firebase.auth;
+import User = firebase.User;
+import { AngularFireAuth } from '@angular/fire/auth';
 
 import { CommentsState } from '../comments.state';
 import { ViewComment } from '../model';
@@ -42,10 +46,14 @@ export class CommentFormComponent implements OnDestroy {
   );
 
   viewComment$: BehaviorSubject<ViewComment | null> = new BehaviorSubject<ViewComment | null>(null);
+  loggedIn$: Observable<boolean> = this.fauth.user.pipe(
+    map((user: User | null) => !!user),
+  );
 
   private destroy$: Subject<void> = new Subject<void>();
 
-  constructor(private commentsState: CommentsState) {
+  constructor(private commentsState: CommentsState,
+              private fauth: AngularFireAuth) {
   }
 
   ngOnDestroy(): void {
@@ -61,6 +69,16 @@ export class CommentFormComponent implements OnDestroy {
     this.showTextarea$.next(false);
     this.commentsState.addComment(formData.content, this.viewComment$.value?.id);
     this.content.patchValue('');
+  }
+
+  async submitAnonymously(): Promise<void> {
+    await this.fauth.signInAnonymously();
+    this.submit(this.formGroup.value);
+  }
+
+  async loginAndSubmit(): Promise<void> {
+    await this.fauth.signInWithPopup(new auth.GoogleAuthProvider());
+    this.submit(this.formGroup.value);
   }
 
   get content$(): Observable<string> {

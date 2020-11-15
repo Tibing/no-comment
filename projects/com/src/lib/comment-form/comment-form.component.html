@@ -18,11 +18,26 @@
       <i>Cancel</i>
     </button>
 
-    <button
-      class="submit"
-      type="submit"
-      *ngIf="showSubmit$ | async">
-      <i>Submit</i>
-    </button>
+    <span *ngIf="showSubmit$ | async">
+      <button
+        *ngIf="loggedIn$ | async; else notLoggedIn"
+        class="submit"
+        type="submit">
+        <i>Submit</i>
+      </button>
+
+      <ng-template #notLoggedIn>
+
+        <button class="submit" type="button" (click)="submitAnonymously()">
+          <i>Submit Anonymously</i>
+        </button>
+
+        <button class="submit" type="button" (click)="loginAndSubmit()">
+          <i>Login with Google and Submit</i>
+        </button>
+
+      </ng-template>
+    </span>
+
   </div>
 </form>

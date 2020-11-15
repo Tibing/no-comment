@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, ElementRef, Input } from '@angular/core';
 import { BehaviorSubject, from, Observable, of } from 'rxjs';
-import { concatMap, delay, filter, shareReplay, switchMap, take, tap } from 'rxjs/operators';
+import { concatMap, delay, filter, shareReplay, switchMap, tap } from 'rxjs/operators';
+import { DomSanitizer } from '@angular/platform-browser';
 
 import { Comment, ViewComment } from '../model';
 import { CommentsState } from '../comments.state';
@@ -38,7 +39,8 @@ export class CommentComponent {
   );
 
   constructor(private commentsState: CommentsState,
-              private elementRef: ElementRef) {
+              private elementRef: ElementRef,
+              public sanitizer: DomSanitizer) {
   }
 
   private findPos(el: HTMLElement): number {

@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 import { Inject, Injectable, NgZone, Optional, PLATFORM_ID } from '@angular/core';
-import { map, shareReplay } from 'rxjs/operators';
+import { map, shareReplay, take, tap } from 'rxjs/operators';
 import { v4 as uuid } from 'uuid';
 import { AngularFirestore, DocumentChangeAction, ENABLE_PERSISTENCE, PERSISTENCE_SETTINGS, SETTINGS } from '@angular/fire/firestore';
 import { AngularFirestoreCollection } from '@angular/fire/firestore/collection/collection';
@@ -9,6 +9,9 @@ import { PersistenceSettings, Settings } from '@angular/fire/firestore/interface
 
 import { Comment, Comments, ViewComments } from './model';
 import { LocationSelector, Selector } from './location-selector';
+import { AngularFireAuth } from '@angular/fire/auth';
+import firebase from 'firebase';
+import User = firebase.User;
 
 @Injectable()
 export class CommentsState extends AngularFirestore {
@@ -54,7 +57,8 @@ export class CommentsState extends AngularFirestore {
               // tslint:disable-next-line:ban-types
               @Inject(PLATFORM_ID) platformId: Object,
               zone: NgZone,
-              @Optional() @Inject(PERSISTENCE_SETTINGS) persistenceSettings: PersistenceSettings | null) {
+              @Optional() @Inject(PERSISTENCE_SETTINGS) persistenceSettings: PersistenceSettings | null,
+              private fauth: AngularFireAuth) {
     super(options, nameOrConfig, shouldEnablePersistence, settings, platformId, zone, persistenceSettings);
   }
 
@@ -65,17 +69,24 @@ export class CommentsState extends AngularFirestore {
   }
 
   addComment(content: string, parentCommentId: string = ''): void {
-    this.col
-      .add({
-        id: uuid(),
-        createdAt: new Date(),
-        parentCommentId,
-        userName: 'Nikita Poltoratsky',
-        votes: 0,
-        content,
-        head: 'https://en.gravatar.com/userimage/151538585/142b66ddcb21c792305183e4bf715a8a.jpg?size=200',
-        location: this.select(),
-      });
+    (this.fauth.user as Observable<User>)
+      .pipe(
+        take(1),
+        tap((user: User) => {
+          this.col
+            .add({
+              id: uuid(),
+              createdAt: new Date(),
+              parentCommentId,
+              userName: user.displayName ?? 'Anonymous',
+              votes: 0,
+              content,
+              head: user.photoURL ?? 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48ZGVmcy8+PHBhdGggZD0iTTUxMiAyNTZhMjU2IDI1NiAwIDEwLTUxMyAxIDI1NiAyNTYgMCAwMDUxMy0xem0tNDk1IDBhMjM5IDIzOSAwIDExMzY3IDIwMnYtNDhjMC00Ni0yNC04OC02NC0xMTEtMi0yLTYtMS05IDAtMzMgMjItNzcgMjItMTEwIDAtMy0xLTctMi05IDAtNDAgMjMtNjQgNjUtNjQgMTExdjQ4QTIzOSAyMzkgMCAwMTE3IDI1NnptMTI4IDIxMnYtNThjMC0zOCAxOS03MyA1MS05NCAzNiAyMiA4NCAyMiAxMjAgMCAzMiAyMSA1MSA1NiA1MSA5NHY1OGEyMzcgMjM3IDAgMDEtMjIyIDB6Ii8+PHBhdGggZD0iTTI1NiAyODJhODUgODUgMCAxMDAtMTcxIDg1IDg1IDAgMDAwIDE3MXptMC0xNTRhNjggNjggMCAxMTAgMTM3IDY4IDY4IDAgMDEwLTEzN3oiLz48L3N2Zz4NCg==',
+              location: this.select(),
+            });
+        }),
+      )
+      .subscribe();
   }
 
   byId(commentId: string): Observable<Comment> {
