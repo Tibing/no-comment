@@ -1,5 +1,10 @@
 <form [formGroup]="formGroup" (ngSubmit)="submit(formGroup.value)">
-  <textarea #textarea [class.visible]="showTextarea$ | async" formControlName="content"></textarea>
+  <textarea
+    #textarea
+    [class.visible]="showTextarea$ | async"
+    formControlName="content"
+    (keyup.shift.enter)="enterSubmit()"
+  ></textarea>
 
   <div class="buttons">
     <button
