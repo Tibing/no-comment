@@ -1,6 +1,6 @@
 import { Component, ElementRef, Input, OnDestroy, ViewChild } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { map, startWith, take } from 'rxjs/operators';
 import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
 
 import { CommentsState } from '../comments.state';
@@ -79,6 +79,18 @@ export class CommentFormComponent implements OnDestroy {
 
   get content$(): Observable<string> {
     return this.content.valueChanges;
+  }
+
+  enterSubmit(): void {
+    this.loggedIn$.pipe(
+      take(1),
+    ).subscribe((loggedIn: boolean) => {
+      if (loggedIn) {
+        this.submit(this.formGroup.value);
+      } else {
+        this.loginAndSubmit();
+      }
+    });
   }
 
   private get content(): AbstractControl {
