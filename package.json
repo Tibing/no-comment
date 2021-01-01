@@ -7,7 +7,9 @@
     "build": "ng build",
     "test": "ng test -- --watch=false --code-coverage",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "build:stats": "ng build --project=demo --stats-json",
+    "analyze": "npm run build:stats && webpack-bundle-analyzer dist/demo/stats.json"
   },
   "private": true,
   "dependencies": {
