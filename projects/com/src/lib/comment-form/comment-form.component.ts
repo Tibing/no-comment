@@ -47,7 +47,7 @@ export class CommentFormComponent implements OnDestroy {
 
   viewComment$: BehaviorSubject<ViewComment | null> = new BehaviorSubject<ViewComment | null>(null);
   loggedIn$: Observable<boolean> = this.fauth.user.pipe(
-    map((user: User | null) => !!user),
+    map((user: User | null) => !user?.isAnonymous),
   );
 
   private destroy$: Subject<void> = new Subject<void>();
