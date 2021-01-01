@@ -15,7 +15,6 @@ import { ViewComments } from './model';
     <span *ngIf="loading$ | async">Loading...</span>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [CommentsState],
 })
 export class ComComponent {
 

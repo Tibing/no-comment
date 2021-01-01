@@ -1,0 +1,39 @@
+name: Validate
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js 14.5
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.5
+
+      - name: Cache Node Modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build -- --prod
+
+      - name: Test
+        run: npm test
+
+      - name: E2E
+        run: npm run e2e
