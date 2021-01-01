@@ -10,6 +10,9 @@ import { CommentsComponent } from './comments/comments.component';
 import { VotesComponent } from './votes/votes.component';
 import { CommentFormComponent } from './comment-form/comment-form.component';
 import { defaultIdSelectorProvider } from './location-selector';
+import { DataSource } from './data-source/data-source';
+import { FirebaseDatasource } from './data-source/firebase.datasource';
+import { CommentsState } from './comments.state';
 
 
 @NgModule({
@@ -21,7 +24,11 @@ import { defaultIdSelectorProvider } from './location-selector';
     AngularFireAuthModule,
   ],
   exports: [ComComponent],
-  providers: [defaultIdSelectorProvider],
+  providers: [
+    defaultIdSelectorProvider,
+    CommentsState,
+    { provide: DataSource, useClass: FirebaseDatasource },
+  ],
 })
 export class ComModule {
 }

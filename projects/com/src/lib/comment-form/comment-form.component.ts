@@ -2,13 +2,10 @@ import { Component, ElementRef, Input, OnDestroy, ViewChild } from '@angular/cor
 import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
-import firebase from 'firebase';
-import auth = firebase.auth;
-import User = firebase.User;
-import { AngularFireAuth } from '@angular/fire/auth';
 
 import { CommentsState } from '../comments.state';
 import { ViewComment } from '../model';
+import { User } from '../data-source/data-source';
 
 @Component({
   selector: 'lib-comment-form',
@@ -46,14 +43,13 @@ export class CommentFormComponent implements OnDestroy {
   );
 
   viewComment$: BehaviorSubject<ViewComment | null> = new BehaviorSubject<ViewComment | null>(null);
-  loggedIn$: Observable<boolean> = this.fauth.user.pipe(
+  loggedIn$: Observable<boolean> = this.commentsState.user$.pipe(
     map((user: User | null) => !user?.isAnonymous),
   );
 
   private destroy$: Subject<void> = new Subject<void>();
 
-  constructor(private commentsState: CommentsState,
-              private fauth: AngularFireAuth) {
+  constructor(private commentsState: CommentsState) {
   }
 
   ngOnDestroy(): void {
@@ -72,12 +68,12 @@ export class CommentFormComponent implements OnDestroy {
   }
 
   async submitAnonymously(): Promise<void> {
-    await this.fauth.signInAnonymously();
+    await this.commentsState.loginAnon();
     this.submit(this.formGroup.value);
   }
 
   async loginAndSubmit(): Promise<void> {
-    await this.fauth.signInWithPopup(new auth.GoogleAuthProvider());
+    await this.commentsState.loginGoogle();
     this.submit(this.formGroup.value);
   }
 
