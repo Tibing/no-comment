@@ -17,7 +17,7 @@ export class FirebaseDatasource implements DataSource {
 
   readonly user$: Observable<User> = this.fauth.user.pipe(
     map((user: FUser | null) => {
-      return { displayName: user?.displayName, uid: user?.uid, photoURL: user?.photoURL } as any;
+      return { displayName: user?.displayName, uid: user?.uid, photoURL: user?.photoURL } as unknown as User;
     }),
   );
 
