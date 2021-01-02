@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { Inject, Injectable } from '@angular/core';
 import { map, shareReplay, take, tap } from 'rxjs/operators';
 import { v4 as uuid } from 'uuid';
@@ -30,8 +30,28 @@ export class CommentsState {
   constructor(private datasource: DataSource, @Inject(LocationSelector) private select: Selector) {
   }
 
-  setVotes(commentId: string, votes: number): void {
-    this.datasource.update({ id: commentId, votes });
+  upvote(commentId: string): void {
+    this.vote(commentId, 1);
+  }
+
+  downvote(commentId: string): void {
+    this.vote(commentId, -1);
+  }
+
+  private vote(commentId: string, vote: 1 | -1): void {
+    combineLatest([this.byId(commentId), this.user$])
+      .pipe(
+        take(1),
+        tap(([comment, user]: [Comment, User]) => {
+          this.datasource.update({
+            id: commentId, votes: [
+              ...comment.votes,
+              { userId: user.uid, vote},
+            ],
+          });
+        }),
+      )
+      .subscribe();
   }
 
   addComment(content: string, parentCommentId: string = ''): void {
@@ -44,7 +64,7 @@ export class CommentsState {
             createdAt: new Date(),
             parentCommentId,
             userName: user.displayName ?? 'Anonymous',
-            votes: 0,
+            votes: [],
             content,
             head: user.photoURL ?? 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48ZGVmcy8+PHBhdGggZD0iTTUxMiAyNTZhMjU2IDI1NiAwIDEwLTUxMyAxIDI1NiAyNTYgMCAwMDUxMy0xem0tNDk1IDBhMjM5IDIzOSAwIDExMzY3IDIwMnYtNDhjMC00Ni0yNC04OC02NC0xMTEtMi0yLTYtMS05IDAtMzMgMjItNzcgMjItMTEwIDAtMy0xLTctMi05IDAtNDAgMjMtNjQgNjUtNjQgMTExdjQ4QTIzOSAyMzkgMCAwMTE3IDI1NnptMTI4IDIxMnYtNThjMC0zOCAxOS03MyA1MS05NCAzNiAyMiA4NCAyMiAxMjAgMCAzMiAyMSA1MSA1NiA1MSA5NHY1OGEyMzcgMjM3IDAgMDEtMjIyIDB6Ii8+PHBhdGggZD0iTTI1NiAyODJhODUgODUgMCAxMDAtMTcxIDg1IDg1IDAgMDAwIDE3MXptMC0xNTRhNjggNjggMCAxMTAgMTM3IDY4IDY4IDAgMDEwLTEzN3oiLz48L3N2Zz4NCg==',
             location: this.select(),
@@ -93,7 +113,7 @@ export class CommentsState {
     for (const comment of currentLevelComments) {
       const children: ViewComments = this.createViewModel(comments, comment.id);
       const justAdded: boolean = !this.commentsCache.has(comment.id) && this.initialLoadDone;
-      viewComments.push({ id: comment.id, children, justAdded });
+      viewComments.push({ ...comment, children, justAdded });
     }
 
     return viewComments;
