@@ -1,7 +1,10 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
+import { filter, map, shareReplay, takeUntil, tap, withLatestFrom } from 'rxjs/operators';
 
-import { Comment } from '../model';
+import { Comment, emptyComment, Vote } from '../model';
 import { CommentsState } from '../comments.state';
+import { User } from '../data-source/data-source';
 
 @Component({
   selector: 'lib-votes',
@@ -9,18 +12,53 @@ import { CommentsState } from '../comments.state';
   styleUrls: ['./votes.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class VotesComponent {
+export class VotesComponent implements OnInit, OnDestroy {
 
-  @Input() comment!: Comment;
+  @Input() set comment(comment: Comment) {
+    this.comment$.next(comment);
+  }
+
+  comment$: BehaviorSubject<Comment> = new BehaviorSubject<Comment>(emptyComment());
+
+  canVote$: Observable<boolean> = combineLatest([this.comment$, this.commentsState.user$]).pipe(
+    filter(([comment, user]: [Comment, User]) => !!comment),
+    map(([comment, user]: [Comment, User]) => comment.votes.every((vote: Vote) => vote.userId !== user.uid)),
+    shareReplay(),
+  );
+
+  votesSum$: Observable<number> = this.comment$.pipe(
+    filter((comment: Comment) => !!comment),
+    map((comment: Comment) => comment.votes.reduce((sum: number, vote: Vote) => sum + vote.vote, 0)),
+  );
+
+  upvote$: Subject<void> = new Subject<void>();
+
+  downvote$: Subject<void> = new Subject<void>();
+
+  private destroy$: Subject<void> = new Subject<void>();
 
   constructor(private commentsState: CommentsState) {
   }
 
-  upvote(): void {
-    this.commentsState.setVotes(this.comment.id, this.comment.votes + 1);
+  ngOnInit(): void {
+    this.upvote$
+      .pipe(
+        withLatestFrom(this.comment$),
+        tap(([upvote, comment]: [void, Comment]) => this.commentsState.upvote(comment.id)),
+        takeUntil(this.destroy$),
+      )
+      .subscribe();
+
+    this.downvote$
+      .pipe(
+        withLatestFrom(this.comment$),
+        tap(([upvote, comment]: [void, Comment]) => this.commentsState.downvote(comment.id)),
+        takeUntil(this.destroy$),
+      )
+      .subscribe();
   }
 
-  downvote(): void {
-    this.commentsState.setVotes(this.comment.id, this.comment.votes - 1);
+  ngOnDestroy(): void {
+    this.destroy$.next();
   }
 }
