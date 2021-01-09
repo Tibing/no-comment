@@ -7,7 +7,7 @@ import { CommentsState } from '../comments.state';
 import { User } from '../data-source/data-source';
 
 @Component({
-  selector: 'lib-votes',
+  selector: 'nc-votes',
   templateUrl: './votes.component.html',
   styleUrls: ['./votes.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,

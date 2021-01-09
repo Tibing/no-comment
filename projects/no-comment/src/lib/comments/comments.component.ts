@@ -17,7 +17,7 @@ const possibleColors: string[] = [
 ];
 
 @Component({
-  selector: 'lib-comments',
+  selector: 'nc-comments',
   templateUrl: './comments.component.html',
   styleUrls: ['./comments.component.css'],
   animations: [commentsEnter],

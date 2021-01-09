@@ -9,7 +9,7 @@ import { Component } from '@angular/core';
       margin: auto;
     }
   `],
-  template: `<lib-com></lib-com>`,
+  template: `<nc-com></nc-com>`,
 })
 export class OtherPageComponent {
 }
