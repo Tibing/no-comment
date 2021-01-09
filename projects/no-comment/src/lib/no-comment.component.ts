@@ -6,7 +6,7 @@ import { CommentsState } from './comments.state';
 import { ViewComments } from './model';
 
 @Component({
-  selector: 'nc-com',
+  selector: 'nc-no-comment',
   template: `
     <nc-comment-form></nc-comment-form>
 

@@ -9,7 +9,7 @@ import { Component } from '@angular/core';
       margin: auto;
     }
   `],
-  template: `<nc-com></nc-com>`,
+  template: `<nc-no-comment></nc-no-comment>`,
 })
 export class OtherPageComponent {
 }
