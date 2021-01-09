@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { ComModule } from 'com';
+import { NoCommentModule } from 'no-comment';
 import { AngularFireModule } from '@angular/fire';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
@@ -17,7 +17,7 @@ import { OtherPageComponent } from './other-page.component';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    ComModule,
+    NoCommentModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     RouterModule.forRoot([
       {

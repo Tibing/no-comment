@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { EMPTY, Observable } from 'rxjs';
 
-import { ComComponent } from './com.component';
+import { NoCommentComponent } from './no-comment.component';
 import { CommentsState } from './comments.state';
 import { Comment, ViewComments } from './model';
 
@@ -23,19 +23,19 @@ export class CommentsStateMock {
 }
 
 describe('ComComponent', () => {
-  let component: ComComponent;
-  let fixture: ComponentFixture<ComComponent>;
+  let component: NoCommentComponent;
+  let fixture: ComponentFixture<NoCommentComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ComComponent],
+      declarations: [NoCommentComponent],
       providers: [{ provide: CommentsState, useClass: CommentsStateMock }],
     })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ComComponent);
+    fixture = TestBed.createComponent(NoCommentComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

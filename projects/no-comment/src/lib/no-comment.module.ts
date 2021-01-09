@@ -4,7 +4,7 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 
-import { ComComponent } from './com.component';
+import { NoCommentComponent } from './no-comment.component';
 import { CommentComponent } from './comment/comment.component';
 import { CommentsComponent } from './comments/comments.component';
 import { VotesComponent } from './votes/votes.component';
@@ -16,19 +16,19 @@ import { CommentsState } from './comments.state';
 
 
 @NgModule({
-  declarations: [ComComponent, CommentComponent, CommentsComponent, VotesComponent, CommentFormComponent],
+  declarations: [NoCommentComponent, CommentComponent, CommentsComponent, VotesComponent, CommentFormComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     AngularFirestoreModule,
     AngularFireAuthModule,
   ],
-  exports: [ComComponent],
+  exports: [NoCommentComponent],
   providers: [
     defaultIdSelectorProvider,
     CommentsState,
     { provide: DataSource, useClass: FirebaseDatasource },
   ],
 })
-export class ComModule {
+export class NoCommentModule {
 }
