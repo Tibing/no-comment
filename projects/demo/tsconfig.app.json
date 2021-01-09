@@ -5,7 +5,7 @@
     "outDir": "../../out-tsc/app",
     "types": [],
     "paths": {
-      "com": ["projects/com/src/public-api.ts"]
+      "no-comment": ["projects/no-comment/src/public-api.ts"]
     }
   },
   "files": [

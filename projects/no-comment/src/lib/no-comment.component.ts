@@ -16,7 +16,7 @@ import { ViewComments } from './model';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ComComponent {
+export class NoCommentComponent {
 
   loading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
   comments$: Observable<ViewComments> = this.commentsState.comments$

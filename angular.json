@@ -3,30 +3,30 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "com": {
+    "no-comment": {
       "projectType": "library",
-      "root": "projects/com",
-      "sourceRoot": "projects/com/src",
-      "prefix": "lib",
+      "root": "projects/no-comment",
+      "sourceRoot": "projects/no-comment/src",
+      "prefix": "nc",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
-            "tsConfig": "projects/com/tsconfig.lib.json",
-            "project": "projects/com/ng-package.json"
+            "tsConfig": "projects/no-comment/tsconfig.lib.json",
+            "project": "projects/no-comment/ng-package.json"
           },
           "configurations": {
             "production": {
-              "tsConfig": "projects/com/tsconfig.lib.prod.json"
+              "tsConfig": "projects/no-comment/tsconfig.lib.prod.json"
             }
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/com/src/test.ts",
-            "tsConfig": "projects/com/tsconfig.spec.json",
-            "karmaConfig": "projects/com/karma.conf.js",
+            "main": "projects/no-comment/src/test.ts",
+            "tsConfig": "projects/no-comment/tsconfig.spec.json",
+            "karmaConfig": "projects/no-comment/karma.conf.js",
             "watch": false,
             "codeCoverage": true
           }
@@ -35,8 +35,8 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/com/tsconfig.lib.json",
-              "projects/com/tsconfig.spec.json"
+              "projects/no-comment/tsconfig.lib.json",
+              "projects/no-comment/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"
@@ -169,5 +169,5 @@
         }
       }
     }},
-  "defaultProject": "com"
+  "defaultProject": "no-comment"
 }
