@@ -8,7 +8,7 @@ import { ViewComment } from '../model';
 import { User } from '../data-source/data-source';
 
 @Component({
-  selector: 'lib-comment-form',
+  selector: 'nc-comment-form',
   templateUrl: './comment-form.component.html',
   styleUrls: ['./comment-form.component.css'],
 })

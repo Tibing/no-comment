@@ -6,11 +6,11 @@ import { CommentsState } from './comments.state';
 import { ViewComments } from './model';
 
 @Component({
-  selector: 'lib-com',
+  selector: 'nc-com',
   template: `
-    <lib-comment-form></lib-comment-form>
+    <nc-comment-form></nc-comment-form>
 
-    <lib-comments [comments]="comments$ | async"></lib-comments>
+    <nc-comments [comments]="comments$ | async"></nc-comments>
 
     <span *ngIf="loading$ | async">Loading...</span>
   `,

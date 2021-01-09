@@ -8,7 +8,7 @@ import { CommentsState } from '../comments.state';
 import { User } from '../data-source/data-source';
 
 @Component({
-  selector: 'lib-comment',
+  selector: 'nc-comment',
   templateUrl: './comment.component.html',
   styleUrls: ['./comment.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
